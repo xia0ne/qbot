@@ -1,3 +1,4 @@
+import math
 import sqlite3
 
 
@@ -90,3 +91,15 @@ def delGroup(number):
         return True
     else:
         return False
+
+def getProblems(a):
+    ratings = math.floor(int(a) / 100) * 100
+    conn = sqlite3.connect('database.db')
+    cursor = conn.execute('SELECT * FROM problems WHERE rating = ?', (ratings,))
+    problems = []
+    for row in cursor:
+        problems.append(row)
+    conn.close()
+    import random
+    return problems[random.randint(0, len(problems) - 1)]
+

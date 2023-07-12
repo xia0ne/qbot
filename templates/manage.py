@@ -3,6 +3,7 @@ from templates import getDB
 from templates import config
 from templates import getTodayContest
 
+
 def manage(number, msg):
     msgg = msg.split(' ')
     if msgg[1] == '帮助':
@@ -29,7 +30,8 @@ def manage(number, msg):
             'msg': '调用接口次数：\n' + getDB.getLogs(),
         })
 
-def private(number,msg):
+
+def private(number, msg):
     msss = msg.split(' ')
     if msss[1] == 'help':
         str = '''
@@ -97,7 +99,8 @@ def private(number,msg):
                 'msg': "您还没有订阅，请先订阅",
             })
 
-def group(number,msg,who):
+
+def group(number, msg, who):
     msss = msg.split(' ')
     if msss[1] == 'help':
         str = '''
@@ -157,5 +160,33 @@ def group(number,msg,who):
                 'number': number,
                 'msg': "您没有权限",
             })
-
-
+    elif msss[1] == 'random':
+        # 判断mess[2] 是不是整数数字
+        try:
+            if 800 <= int(msss[2]) <= 3500:
+                problem = getDB.getProblems(msss[2])
+                if problem:
+                    msg = f'给您推荐 {problem[1]} 分的题目, 他的链接是 {problem[2]}'
+                    sendmessage.send_msg({
+                        'msg_type': 'group',
+                        'number': number,
+                        'msg': msg,
+                    })
+                else:
+                    sendmessage.send_msg({
+                        'msg_type': 'group',
+                        'number': number,
+                        'msg': '没有找到题目',
+                    })
+            else:
+                sendmessage.send_msg({
+                    'msg_type': 'group',
+                    'number': number,
+                    'msg': '请输入正确的分数',
+                })
+        except:
+            sendmessage.send_msg({
+                'msg_type': 'group',
+                'number': number,
+                'msg': '请输入正确的分数',
+            })
