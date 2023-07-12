@@ -161,7 +161,6 @@ def group(number, msg, who):
                 'msg': "您没有权限",
             })
     elif msss[1] == 'random':
-        # 判断mess[2] 是不是整数数字
         try:
             if 800 <= int(msss[2]) <= 3500:
                 problem = getDB.getProblems(msss[2])
