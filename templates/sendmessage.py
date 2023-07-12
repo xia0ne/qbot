@@ -7,6 +7,8 @@ resp_dict = {
 }
 '''
 import socket
+from templates import getDB
+import time
 
 
 def send_msg(resp_dict):
@@ -28,4 +30,5 @@ def send_msg(resp_dict):
     print("发送" + payload)
     client.send(payload.encode("utf-8"))
     client.close()
+    getDB.ToLogs(msg, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), msg_type, number)
     return 0

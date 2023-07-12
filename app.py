@@ -1,10 +1,10 @@
 from flask import Flask, request
 import requests
 from templates import sendmessage
+from templates import manage
+from templates import config
 
 app = Flask(__name__)
-
-administrator = 1223605525
 
 '''
 接收消息
@@ -12,7 +12,14 @@ administrator = 1223605525
 @app.route('/', methods=["POST"])
 def post_data():
     if request.get_json().get('message_type') == 'private':
-        print(1)
+        if request.get_json().get('user_id') == config.administrator and request.get_json().get('message')[0:6] == '#admin':
+            manage.manage(request.get_json().get('user_id'), request.get_json().get('raw_message'))
+        elif request.get_json().get('message')[0:4] == '/bot':
+            manage.private(request.get_json().get('user_id'), request.get_json().get('raw_message'))
+    elif request.get_json().get('message_type') == 'group':
+        if request.get_json().get('message')[0:4] == '/bot':
+            manage.group(request.get_json().get('group_id'), request.get_json().get('raw_message'), request.get_json().get('user_id'))
+
     return 'OK'
 
 
