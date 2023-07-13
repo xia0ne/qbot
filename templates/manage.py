@@ -2,6 +2,7 @@ from templates import sendmessage
 from templates import getDB
 from templates import config
 from templates import getTodayContest
+from templates import tools
 
 
 def manage(number, msg):
@@ -217,24 +218,24 @@ def group(number, msg, who):
     elif msss[1] == 'addcf':
         try:
             # if who == config.administrator:
-                if getDB.addcfUsers(msss[2], msss[3]):
-                    sendmessage.send_msg({
-                        'msg_type': 'group',
-                        'number': number,
-                        'msg': "添加成功",
-                    })
-                else:
-                    sendmessage.send_msg({
-                        'msg_type': 'group',
-                        'number': number,
-                        'msg': '添加失败',
-                    })
-            # else:
-            #     sendmessage.send_msg({
-            #         'msg_type': 'group',
-            #         'number': number,
-            #         'msg': "您没有权限",
-            #     })
+            if getDB.addcfUsers(msss[2], msss[3]):
+                sendmessage.send_msg({
+                    'msg_type': 'group',
+                    'number': number,
+                    'msg': "添加成功",
+                })
+            else:
+                sendmessage.send_msg({
+                    'msg_type': 'group',
+                    'number': number,
+                    'msg': '添加失败',
+                })
+        # else:
+        #     sendmessage.send_msg({
+        #         'msg_type': 'group',
+        #         'number': number,
+        #         'msg': "您没有权限",
+        #     })
         except:
             sendmessage.send_msg({
                 'msg_type': 'group',
@@ -243,7 +244,7 @@ def group(number, msg, who):
             })
     elif msss[1] == 'modcf':
         if who == config.administrator:
-            if getDB.modcfUsers(msss[2], msss[3]):
+            if getDB.changecfUsers(msss[2], msss[3]):
                 sendmessage.send_msg({
                     'msg_type': 'group',
                     'number': number,
@@ -282,12 +283,12 @@ def group(number, msg, who):
                 'msg': "您没有权限",
             })
     elif msss[1] == 'allcf':
-        if who == config.administrator:
-            sendmessage.send_msg({
-                'msg_type': 'group',
-                'number': number,
-                'msg': getDB.getAllcfUser(),
-            })
+        # if who == config.administrator:
+        sendmessage.send_msg({
+            'msg_type': 'group',
+            'number': number,
+            'msg': getDB.getAllcfUser(),
+        })
     else:
         sendmessage.send_msg({
             'msg_type': 'group',
