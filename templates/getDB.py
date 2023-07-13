@@ -72,6 +72,7 @@ def findGroup(number):
         conn.close()
         return True
 
+
 def addGroup(number):
     if findGroup(number):
         return False
@@ -82,6 +83,7 @@ def addGroup(number):
         conn.close()
         return True
 
+
 def delGroup(number):
     if findGroup(number):
         conn = sqlite3.connect('database.db')
@@ -91,6 +93,7 @@ def delGroup(number):
         return True
     else:
         return False
+
 
 def getProblems(a):
     ratings = math.floor(int(a) / 100) * 100
@@ -103,3 +106,58 @@ def getProblems(a):
     import random
     return problems[random.randint(0, len(problems) - 1)]
 
+
+def getcfUsers(a):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.execute('SELECT * FROM cfusers WHERE cfname = ?', (a,))
+    users = []
+    for row in cursor:
+        users.append(row)
+    conn.close()
+    if len(users) == 0:
+        return False
+    else:
+        return users[0][1]
+
+
+def addcfUsers(cfname, realname):
+    if getcfUsers(cfname):
+        return False
+    else:
+        conn = sqlite3.connect('database.db')
+        conn.execute('INSERT INTO cfusers (cfname,realname) VALUES (?,?)', (cfname, realname))
+        conn.commit()
+        conn.close()
+        return True
+
+
+def changecfUsers(cfname, realname):
+    if not getcfUsers(cfname):
+        return False
+    else:
+        conn = sqlite3.connect('database.db')
+        conn.execute('UPDATE cfusers SET realname = ? WHERE cfname = ?', (realname, cfname))
+        conn.commit()
+        conn.close()
+        return True
+
+
+def delcfUsers(cfname):
+    if not getcfUsers(cfname):
+        return False
+    else:
+        conn = sqlite3.connect('database.db')
+        conn.execute('DELETE FROM cfusers WHERE cfname = ?', (cfname,))
+        conn.commit()
+        conn.close()
+        return True
+
+
+def getAllcfUser():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.execute('SELECT * FROM cfusers')
+    users = ""
+    for row in cursor:
+        users += row[0] + " " + row[1] + "\n"
+    conn.close()
+    return users

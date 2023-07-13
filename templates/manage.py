@@ -107,6 +107,11 @@ def group(number, msg, who):
 /bot help 查看帮助
 /bot contest 查看今日比赛
 /bot random xxx 随机一道cfxxx分的题目
+/bot cf xxx 查看cf名为xxx是谁
+/bot addcf xxx1 xxx2 添加cf名xxx1的名字为xxx2
+/bot modcf xxx1 xxx2 修改cf名为xxx1的名字为xxx2
+/bot delcf xxx 删除cf名为xxx的名字
+
 '''
         sendmessage.send_msg({
             'msg_type': 'group',
@@ -189,3 +194,103 @@ def group(number, msg, who):
                 'number': number,
                 'msg': '请输入正确的分数',
             })
+    elif msss[1] == 'cf':
+        try:
+            if getDB.getcfUsers(msss[2]):
+                sendmessage.send_msg({
+                    'msg_type': 'group',
+                    'number': number,
+                    'msg': "{} 的cf是 {}".format(msss[2], getDB.getcfUsers(msss[2])),
+                })
+            else:
+                sendmessage.send_msg({
+                    'msg_type': 'group',
+                    'number': number,
+                    'msg': '没有找到用户',
+                })
+        except:
+            sendmessage.send_msg({
+                'msg_type': 'group',
+                'number': number,
+                'msg': '请输入正确的用户名',
+            })
+    elif msss[1] == 'addcf':
+        try:
+            # if who == config.administrator:
+                if getDB.addcfUsers(msss[2], msss[3]):
+                    sendmessage.send_msg({
+                        'msg_type': 'group',
+                        'number': number,
+                        'msg': "添加成功",
+                    })
+                else:
+                    sendmessage.send_msg({
+                        'msg_type': 'group',
+                        'number': number,
+                        'msg': '添加失败',
+                    })
+            # else:
+            #     sendmessage.send_msg({
+            #         'msg_type': 'group',
+            #         'number': number,
+            #         'msg': "您没有权限",
+            #     })
+        except:
+            sendmessage.send_msg({
+                'msg_type': 'group',
+                'number': number,
+                'msg': '请输入正确的用户名',
+            })
+    elif msss[1] == 'modcf':
+        if who == config.administrator:
+            if getDB.modcfUsers(msss[2], msss[3]):
+                sendmessage.send_msg({
+                    'msg_type': 'group',
+                    'number': number,
+                    'msg': "修改成功",
+                })
+            else:
+                sendmessage.send_msg({
+                    'msg_type': 'group',
+                    'number': number,
+                    'msg': '修改失败',
+                })
+        else:
+            sendmessage.send_msg({
+                'msg_type': 'group',
+                'number': number,
+                'msg': "您没有权限",
+            })
+    elif msss[1] == 'delcf':
+        if who == config.administrator:
+            if getDB.delcfUsers(msss[2]):
+                sendmessage.send_msg({
+                    'msg_type': 'group',
+                    'number': number,
+                    'msg': "删除成功",
+                })
+            else:
+                sendmessage.send_msg({
+                    'msg_type': 'group',
+                    'number': number,
+                    'msg': '删除失败',
+                })
+        else:
+            sendmessage.send_msg({
+                'msg_type': 'group',
+                'number': number,
+                'msg': "您没有权限",
+            })
+    elif msss[1] == 'allcf':
+        if who == config.administrator:
+            sendmessage.send_msg({
+                'msg_type': 'group',
+                'number': number,
+                'msg': getDB.getAllcfUser(),
+            })
+    else:
+        sendmessage.send_msg({
+            'msg_type': 'group',
+            'number': number,
+            'msg': "没有这个指令",
+        })
