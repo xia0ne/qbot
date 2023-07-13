@@ -1,6 +1,23 @@
 import math
 import sqlite3
 
+def getSendPeople():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.execute('SELECT * FROM users ')
+    people = []
+    for row in cursor:
+        people.append(row[0])
+    conn.close()
+    return people
+
+def getSendGoup():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.execute('SELECT * FROM groups ')
+    groups = []
+    for row in cursor:
+        groups.append(row[0])
+    conn.close()
+    return groups
 
 def getPeople():
     conn = sqlite3.connect('database.db')
@@ -11,13 +28,11 @@ def getPeople():
     conn.close()
     return str(len(people))
 
-
 def ToLogs(msg, time, type, number):
     conn = sqlite3.connect('database.db')
     conn.execute('INSERT INTO message (msg,time,type,number) VALUES (?,?,?,?)', (msg, time, type, number))
     conn.commit()
     conn.close()
-
 
 def getLogs():
     conn = sqlite3.connect('database.db')
