@@ -8,3 +8,4 @@ out
 gen
 
 go-cqhttp/
+__pycache__/
